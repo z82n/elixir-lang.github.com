@@ -332,13 +332,19 @@ If you open up `rel/env.sh.eex`, you will see:
 #!/bin/sh
 
 # Sets and enables heart (recommended only in daemon mode)
-# if [ "$RELEASE_COMMAND" = "daemon" ] || [ "$RELEASE_COMMAND" = "daemon_iex" ]; then
-#   HEART_COMMAND="$RELEASE_ROOT/bin/$RELEASE_NAME $RELEASE_COMMAND"
-#   export HEART_COMMAND
-#   export ELIXIR_ERL_OPTIONS="-heart"
-# fi
+# case $RELEASE_COMMAND in
+#   daemon*)
+#     HEART_COMMAND="$RELEASE_ROOT/bin/$RELEASE_NAME $RELEASE_COMMAND"
+#     export HEART_COMMAND
+#     export ELIXIR_ERL_OPTIONS="-heart"
+#     ;;
+#   *)
+#     ;;
+# esac
 
-# Set the release to work across nodes
+# Set the release to work across nodes. If using the long name format like
+# the one below (my_app@127.0.0.1), you need to also uncomment the
+# RELEASE_DISTRIBUTION variable below. Must be "sname", "name" or "none".
 # export RELEASE_DISTRIBUTION=name
 # export RELEASE_NODE=<%= @release.name %>@127.0.0.1
 ```
